@@ -1,26 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword';
 import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Appointments from './pages/Appointments';
-import Staff from './pages/Staff';
-import History from './pages/History';
-import Settings from './pages/Settings';
 
 function App() {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/appointments" element={<Appointments />} />
-          <Route path="/staff" element={<Staff />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/logout" element={<p>Saliendo del sistema...</p>} />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/layout" element={<Layout/>} />
+      </Routes>
     </Router>
   );
 }
