@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 
 const Settings = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
 
-  const toggleDropdown = () => {
+  /*const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
+  };*/
 
   const openModal = (modalId) => {
     setActiveModal(modalId);
@@ -23,16 +23,17 @@ const Settings = () => {
 
   return (
     <div>
-      <div className="dropdown">
-        <button id="ajustesBtn" onClick={toggleDropdown}>Ajustes</button>
-        {isDropdownOpen && (
+      {/* <div className="dropdown"> */}
+        {/* <button id="ajustesBtn" onClick={toggleDropdown}>Ajustes</button> */}
+      <div className='settings-content'>  
+        {/* {isDropdownOpen && ( */}
+        <h1>Configuración</h1>
           <div className="dropdown-content">
             <a href="#generalModal" onClick={() => openModal('generalModal')}>General</a>
             <a href="#cuentaModal" onClick={() => openModal('cuentaModal')}>Cuenta</a>
             <a href="#accesibilidadModal" onClick={() => openModal('accesibilidadModal')}>Accesibilidad</a>
             <a href="#privacidadModal" onClick={() => openModal('privacidadModal')}>Privacidad</a>
           </div>
-        )}
       </div>
 
       {activeModal === 'generalModal' && (
