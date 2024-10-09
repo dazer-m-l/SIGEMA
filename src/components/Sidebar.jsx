@@ -1,32 +1,31 @@
+// src/components/Sidebar.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white">
-      <h2 className="text-2xl font-bold p-4">SIGEMA</h2>
-      <nav className="mt-10">
-        <ul>
-          <li className="p-2 hover:bg-gray-700">
-            <Link to="/dashboard">Status General</Link>
-          </li>
-          <li className="p-2 hover:bg-gray-700">
-            <Link to="/appointments">Gestor de Citas</Link>
-          </li>
-          <li className="p-2 hover:bg-gray-700">
-            <Link to="/staff">Personal</Link>
-          </li>
-          <li className="p-2 hover:bg-gray-700">
-            <Link to="/history">Historial de Citas</Link>
-          </li>
-          <li className="p-2 hover:bg-gray-700">
-            <Link to="/settings">Configuración</Link>
-          </li>
-          <li className="p-2 hover:bg-gray-700">
-            <Link to="/logout">Cerrar Sesión</Link>
-          </li>
-        </ul>
-      </nav>
+    <div className="w-64 bg-blue-600 h-screen p-5 text-white">
+      <h2 className="text-2xl font-bold mb-10">SIGEMA</h2>
+      <ul>
+        <li className="mb-4">
+          <Link to="/dashboard" className="hover:text-gray-300">Dashboard</Link>
+        </li>
+        <li className="mb-4">
+          <Link to="/appointments" className="hover:text-gray-300">Gestor de Citas</Link>
+        </li>
+        <li className="mb-4">
+          <Link to="/staff" className="hover:text-gray-300">Personal</Link>
+        </li>
+        <li className="mb-4">
+          <Link to="/history" className="hover:text-gray-300">Historial de Citas</Link>
+        </li>
+        <li className="mb-4">
+          <Link to="/settings" className="hover:text-gray-300">Configuración</Link>
+        </li>
+        <li className="mb-4">
+          <Link to="/" className="hover:text-gray-300">Cerrar Sesión</Link>
+        </li>
+      </ul>
     </div>
   );
 };
