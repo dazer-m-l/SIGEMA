@@ -1,13 +1,25 @@
 import React, { useState } from 'react'
-import { Trash2Icon, AlertCircleIcon } from 'lucide-react'
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Trash2, AlertCircle } from 'lucide-react'
+import { 
+  Button, 
+  TextField, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableRow, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle,
+  Checkbox,
+  Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material'
 
 const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
   const [appointment, setAppointment] = useState(
@@ -35,112 +47,83 @@ const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-4">
-      <div>
-        <label htmlFor="patientName" className="block font-bold text-gray-700 mb-1">
-          Nombre del Paciente:
-        </label>
-        <Input
-          type="text"
-          id="patientName"
-          name="patientName"
-          value={appointment.patientName}
+      <TextField
+        label="Nombre del Paciente"
+        name="patientName"
+        value={appointment.patientName}
+        onChange={handleChange}
+        required
+        fullWidth
+      />
+      <TextField
+        label="Identificación del Paciente"
+        name="patientId"
+        value={appointment.patientId}
+        onChange={handleChange}
+        required
+        fullWidth
+      />
+      <TextField
+        label="Fecha de la Cita"
+        name="date"
+        type="date"
+        value={appointment.date}
+        onChange={handleChange}
+        required
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+      <TextField
+        label="Hora de la Cita"
+        name="time"
+        type="time"
+        value={appointment.time}
+        onChange={handleChange}
+        required
+        fullWidth
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+      <FormControl fullWidth>
+        <InputLabel id="doctor-label">Médico Asignado</InputLabel>
+        <Select
+          labelId="doctor-label"
+          name="doctor"
+          value={appointment.doctor}
           onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="patientId" className="block font-bold text-gray-700 mb-1">
-          Identificación del Paciente:
-        </label>
-        <Input
-          type="text"
-          id="patientId"
-          name="patientId"
-          value={appointment.patientId}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="date" className="block font-bold text-gray-700 mb-1">
-          Fecha de la Cita:
-        </label>
-        <Input
-          type="date"
-          id="date"
-          name="date"
-          value={appointment.date}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="time" className="block font-bold text-gray-700 mb-1">
-          Hora de la Cita:
-        </label>
-        <Input
-          type="time"
-          id="time"
-          name="time"
-          value={appointment.time}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="doctor" className="block font-bold text-gray-700 mb-1">
-          Médico Asignado:
-        </label>
-        <Select 
-          name="doctor" 
-          value={appointment.doctor} 
-          onValueChange={(value) => handleChange({ target: { name: 'doctor', value } })}
         >
-          <SelectTrigger>
-            <SelectValue placeholder="Seleccione un médico" />
-          </SelectTrigger>
-          <SelectContent>
-            {doctors.map((doctor) => (
-              <SelectItem key={doctor.id} value={doctor.id}>
-                {doctor.name} - {doctor.specialty}
-              </SelectItem>
-            ))}
-          </SelectContent>
+          {doctors.map((doctor) => (
+            <MenuItem key={doctor.id} value={doctor.id}>
+              {doctor.name} - {doctor.specialty}
+            </MenuItem>
+          ))}
         </Select>
-      </div>
-      <div>
-        <label htmlFor="reason" className="block font-bold text-gray-700 mb-1">
-          Motivo de la Cita:
-        </label>
-        <Input
-          type="text"
-          id="reason"
-          name="reason"
-          value={appointment.reason}
+      </FormControl>
+      <TextField
+        label="Motivo de la Cita"
+        name="reason"
+        value={appointment.reason}
+        onChange={handleChange}
+        required
+        fullWidth
+      />
+      <FormControl fullWidth>
+        <InputLabel id="status-label">Estado de la Cita</InputLabel>
+        <Select
+          labelId="status-label"
+          name="status"
+          value={appointment.status}
           onChange={handleChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="status" className="block font-bold text-gray-700 mb-1">
-          Estado de la Cita:
-        </label>
-        <Select 
-          name="status" 
-          value={appointment.status} 
-          onValueChange={(value) => handleChange({ target: { name: 'status', value } })}
         >
-          <SelectTrigger>
-            <SelectValue placeholder="Seleccione un estado" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Pendiente">Pendiente</SelectItem>
-            <SelectItem value="Confirmada">Confirmada</SelectItem>
-            <SelectItem value="Cancelada">Cancelada</SelectItem>
-          </SelectContent>
+          <MenuItem value="Pendiente">Pendiente</MenuItem>
+          <MenuItem value="Confirmada">Confirmada</MenuItem>
+          <MenuItem value="Cancelada">Cancelada</MenuItem>
         </Select>
-      </div>
-      <Button type="submit">
+      </FormControl>
+      <Button type="submit" variant="contained">
         {appointmentToEdit ? 'Actualizar Cita' : 'Agendar Cita'}
       </Button>
     </form>
@@ -150,25 +133,25 @@ const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
 const AppointmentTable = ({ appointments, onDelete, onSelect }) => {
   return (
     <Table>
-      <TableHeader>
+      <TableHead>
         <TableRow>
-          <TableHead>Seleccionar</TableHead>
-          <TableHead>Paciente</TableHead>
-          <TableHead>Fecha</TableHead>
-          <TableHead>Hora</TableHead>
-          <TableHead>Médico</TableHead>
-          <TableHead>Motivo</TableHead>
-          <TableHead>Estado</TableHead>
-          <TableHead>Acciones</TableHead>
+          <TableCell>Seleccionar</TableCell>
+          <TableCell>Paciente</TableCell>
+          <TableCell>Fecha</TableCell>
+          <TableCell>Hora</TableCell>
+          <TableCell>Médico</TableCell>
+          <TableCell>Motivo</TableCell>
+          <TableCell>Estado</TableCell>
+          <TableCell>Acciones</TableCell>
         </TableRow>
-      </TableHeader>
+      </TableHead>
       <TableBody>
         {appointments.map((appointment, index) => (
           <TableRow key={index}>
             <TableCell>
               <Checkbox
                 checked={appointment.selected}
-                onCheckedChange={(checked) => onSelect(index, checked)}
+                onChange={(e) => onSelect(index, e.target.checked)}
               />
             </TableCell>
             <TableCell>{appointment.patientName}</TableCell>
@@ -178,8 +161,8 @@ const AppointmentTable = ({ appointments, onDelete, onSelect }) => {
             <TableCell>{appointment.reason}</TableCell>
             <TableCell>{appointment.status}</TableCell>
             <TableCell>
-              <Button variant="ghost" onClick={() => onDelete(index)}>
-                <Trash2Icon className="h-4 w-4" />
+              <Button variant="text" onClick={() => onDelete(index)}>
+                <Trash2 />
               </Button>
             </TableCell>
           </TableRow>
@@ -210,7 +193,7 @@ const Component = () => {
   const doctors = [
     { id: '1', name: 'Dr. García', specialty: 'Cardiología' },
     { id: '2', name: 'Dra. Rodríguez', specialty: 'Pediatría' },
-    // Add more doctors as needed
+    // Agrega más médicos según sea necesario
   ]
 
   const handleSubmit = (newAppointment) => {
@@ -254,26 +237,16 @@ const Component = () => {
       </div>
       <div className="space-y-4">
         <div className="flex justify-between">
-          <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-            <DialogTrigger asChild>
-              <Button>Agendar Cita</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Agendar Nueva Cita</DialogTitle>
-              </DialogHeader>
-              <AppointmentForm onSubmit={handleSubmit} onClose={() => setIsAddModalOpen(false)} doctors={doctors} />
-            </DialogContent>
-          </Dialog>
-          <Button onClick={handleUpdate}>Actualizar Cita</Button>
+          <Button variant="contained" onClick={() => setIsAddModalOpen(true)}>
+            Agendar Cita
+          </Button>
+          <Button variant="contained" onClick={handleUpdate}>
+            Actualizar Cita
+          </Button>
         </div>
         {showAlert && (
-          <Alert variant="destructive">
-            <AlertCircleIcon className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-              Por favor, seleccione una cita antes de actualizar.
-            </AlertDescription>
+          <Alert severity="error" onClose={() => setShowAlert(false)}>
+            Por favor, seleccione una cita antes de actualizar.
           </Alert>
         )}
       </div>
@@ -281,12 +254,16 @@ const Component = () => {
         <h2 className="text-xl font-semibold">Lista de Citas</h2>
         <AppointmentTable appointments={appointments} onDelete={handleDelete} onSelect={handleSelect} />
       </div>
+      <Dialog open={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
+        <DialogTitle>Agendar Nueva Cita</DialogTitle>
+        <DialogContent>
+          <AppointmentForm onSubmit={handleSubmit} onClose={() => setIsAddModalOpen(false)} doctors={doctors} />
+        </DialogContent>
+      </Dialog>
       {isUpdateModalOpen && selectedAppointmentIndex !== null && (
-        <Dialog open={isUpdateModalOpen} onOpenChange={setIsUpdateModalOpen}>
+        <Dialog open={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
+          <DialogTitle>Actualizar Cita</DialogTitle>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Actualizar Cita</DialogTitle>
-            </DialogHeader>
             <AppointmentForm
               onSubmit={handleEdit}
               appointmentToEdit={appointments[selectedAppointmentIndex]}
@@ -299,6 +276,5 @@ const Component = () => {
     </div>
   )
 }
-
 
 export default AppointmentForm;
