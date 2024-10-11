@@ -1,25 +1,5 @@
-import React, { useState } from 'react'
-import { Trash2, AlertCircle } from 'lucide-react'
-import { 
-  Button, 
-  TextField, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableRow, 
-  Dialog, 
-  DialogActions, 
-  DialogContent, 
-  DialogContentText, 
-  DialogTitle,
-  Checkbox,
-  Alert,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel
-} from '@mui/material'
+import React, { useState } from 'react';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
   const [appointment, setAppointment] = useState(
@@ -32,21 +12,21 @@ const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
       reason: '',
       status: 'Pendiente',
     }
-  )
+  );
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setAppointment((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setAppointment((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    onSubmit(appointment)
-    onClose()
-  }
+    e.preventDefault();
+    onSubmit(appointment);
+    if (onClose) onClose(); // Si `onClose` está definido, ciérralo después de enviar
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4">
+    <form onSubmit={handleSubmit} className="grid gap-4" style={{ width: '100%', maxWidth: '800px' }}> {/* Ajusta el ancho máximo */}
       <TextField
         label="Nombre del Paciente"
         name="patientName"
@@ -94,6 +74,7 @@ const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
           name="doctor"
           value={appointment.doctor}
           onChange={handleChange}
+          required
         >
           {doctors.map((doctor) => (
             <MenuItem key={doctor.id} value={doctor.id}>
@@ -117,6 +98,7 @@ const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
           name="status"
           value={appointment.status}
           onChange={handleChange}
+          required
         >
           <MenuItem value="Pendiente">Pendiente</MenuItem>
           <MenuItem value="Confirmada">Confirmada</MenuItem>
@@ -127,154 +109,7 @@ const AppointmentForm = ({ onSubmit, appointmentToEdit, onClose, doctors }) => {
         {appointmentToEdit ? 'Actualizar Cita' : 'Agendar Cita'}
       </Button>
     </form>
-  )
-}
-
-const AppointmentTable = ({ appointments, onDelete, onSelect }) => {
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Seleccionar</TableCell>
-          <TableCell>Paciente</TableCell>
-          <TableCell>Fecha</TableCell>
-          <TableCell>Hora</TableCell>
-          <TableCell>Médico</TableCell>
-          <TableCell>Motivo</TableCell>
-          <TableCell>Estado</TableCell>
-          <TableCell>Acciones</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {appointments.map((appointment, index) => (
-          <TableRow key={index}>
-            <TableCell>
-              <Checkbox
-                checked={appointment.selected}
-                onChange={(e) => onSelect(index, e.target.checked)}
-              />
-            </TableCell>
-            <TableCell>{appointment.patientName}</TableCell>
-            <TableCell>{appointment.date}</TableCell>
-            <TableCell>{appointment.time}</TableCell>
-            <TableCell>{appointment.doctor}</TableCell>
-            <TableCell>{appointment.reason}</TableCell>
-            <TableCell>{appointment.status}</TableCell>
-            <TableCell>
-              <Button variant="text" onClick={() => onDelete(index)}>
-                <Trash2 />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
-}
-
-const Component = () => {
-  const [appointments, setAppointments] = useState([
-    {
-      patientName: 'Juan Pérez',
-      patientId: '12345',
-      date: '2023-06-15',
-      time: '10:00',
-      doctor: '1',
-      reason: 'Chequeo anual',
-      status: 'Pendiente',
-      selected: false,
-    }
-  ])
-  const [showAlert, setShowAlert] = useState(false)
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
-  const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(null)
-
-  const doctors = [
-    { id: '1', name: 'Dr. García', specialty: 'Cardiología' },
-    { id: '2', name: 'Dra. Rodríguez', specialty: 'Pediatría' },
-    // Agrega más médicos según sea necesario
-  ]
-
-  const handleSubmit = (newAppointment) => {
-    setAppointments([...appointments, { ...newAppointment, selected: false }])
-  }
-
-  const handleEdit = (updatedAppointment) => {
-    const updatedAppointments = [...appointments]
-    updatedAppointments[selectedAppointmentIndex] = { ...updatedAppointment, selected: false }
-    setAppointments(updatedAppointments)
-    setSelectedAppointmentIndex(null)
-  }
-
-  const handleDelete = (index) => {
-    const updatedAppointments = appointments.filter((_, i) => i !== index)
-    setAppointments(updatedAppointments)
-  }
-
-  const handleSelect = (index, checked) => {
-    const updatedAppointments = [...appointments]
-    updatedAppointments[index].selected = checked
-    setAppointments(updatedAppointments)
-  }
-
-  const handleUpdate = () => {
-    const selectedAppointment = appointments.findIndex(appointment => appointment.selected)
-    if (selectedAppointment === -1) {
-      setShowAlert(true)
-      setTimeout(() => setShowAlert(false), 3000)
-    } else {
-      setSelectedAppointmentIndex(selectedAppointment)
-      setIsUpdateModalOpen(true)
-    }
-  }
-
-  return (
-    <div className="space-y-8 p-4 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">Citas Médicas</h1>
-        <p className="text-muted-foreground">Esta sección muestra las citas médicas programadas.</p>
-      </div>
-      <div className="space-y-4">
-        <div className="flex justify-between">
-          <Button variant="contained" onClick={() => setIsAddModalOpen(true)}>
-            Agendar Cita
-          </Button>
-          <Button variant="contained" onClick={handleUpdate}>
-            Actualizar Cita
-          </Button>
-        </div>
-        {showAlert && (
-          <Alert severity="error" onClose={() => setShowAlert(false)}>
-            Por favor, seleccione una cita antes de actualizar.
-          </Alert>
-        )}
-      </div>
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Lista de Citas</h2>
-        <AppointmentTable appointments={appointments} onDelete={handleDelete} onSelect={handleSelect} />
-      </div>
-      <Dialog open={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
-        <DialogTitle>Agendar Nueva Cita</DialogTitle>
-        <DialogContent>
-          <AppointmentForm onSubmit={handleSubmit} onClose={() => setIsAddModalOpen(false)} doctors={doctors} />
-        </DialogContent>
-      </Dialog>
-      {isUpdateModalOpen && selectedAppointmentIndex !== null && (
-        <Dialog open={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
-          <DialogTitle>Actualizar Cita</DialogTitle>
-          <DialogContent>
-            <AppointmentForm
-              onSubmit={handleEdit}
-              appointmentToEdit={appointments[selectedAppointmentIndex]}
-              onClose={() => setIsUpdateModalOpen(false)}
-              doctors={doctors}
-            />
-          </DialogContent>
-        </Dialog>
-      )}
-    </div>
-  )
-}
+  );
+};
 
 export default AppointmentForm;
