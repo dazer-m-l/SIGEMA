@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+    --color-1: #8ECAE6; /* Azul claro */
+    --color-2: #02A4EE; /* Azul fuerte */
+    --color-3: #FFB703; /* Amarillo */
+    --color-4: #F79256; /* Naranja */
+    --color-5: #FBD1A2; /* Beige */
+}

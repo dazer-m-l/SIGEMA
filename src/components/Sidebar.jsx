@@ -4,26 +4,26 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="w-64 bg-blue-600 h-screen p-5 text-white">
+    <div className="w-64 bg-[var(--color-2)] h-screen p-5 text-white">
       <h2 className="text-2xl font-bold mb-10">SIGEMA</h2>
       <ul>
         <li className="mb-4">
-          <Link to="/dashboard" className="hover:text-gray-300">Dashboard</Link>
+          <Link to="/dashboard" className="hover:text-[var(--color-4)]">Dashboard</Link>
         </li>
         <li className="mb-4">
-          <Link to="/appointments" className="hover:text-gray-300">Gestor de Citas</Link>
+          <Link to="/appointments" className="hover:text-[var(--color-4)]">Gestor de Citas</Link>
         </li>
         <li className="mb-4">
-          <Link to="/staff" className="hover:text-gray-300">Personal</Link>
+          <Link to="/staff" className="hover:text-[var(--color-4)]">Personal</Link>
         </li>
         <li className="mb-4">
-          <Link to="/history" className="hover:text-gray-300">Historial de Citas</Link>
+          <Link to="/history" className="hover:text-[var(--color-4)]">Historial de Citas</Link>
         </li>
         <li className="mb-4">
-          <Link to="/settings" className="hover:text-gray-300">Configuración</Link>
+          <Link to="/settings" className="hover:text-[var(--color-4)]">Configuración</Link>
         </li>
         <li className="mb-4">
-          <Link to="/" className="hover:text-gray-300">Cerrar Sesión</Link>
+          <Link to="/" className="hover:text-[var(--color-4)]">Cerrar Sesión</Link>
         </li>
       </ul>
     </div>
