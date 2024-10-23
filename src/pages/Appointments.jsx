@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogContent, DialogTitle, Alert } from '@mui/material';
+import { Trash2 } from 'lucide-react';
 import AppointmentForm from '../components/AppointmentForm';
 import AppointmentTable from '../components/AppointmentTable';
 
@@ -19,7 +19,7 @@ const Appointments = () => {
   ]);
   
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // Nuevo estado para el modal de agregar cita
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -32,7 +32,7 @@ const Appointments = () => {
   const handleSelect = (index, checked) => {
     const updatedAppointments = appointments.map((appointment, i) => ({
       ...appointment,
-      selected: i === index ? checked : false, // Solo permite seleccionar una cita
+      selected: i === index ? checked : false,
     }));
     setAppointments(updatedAppointments);
   };
@@ -42,7 +42,7 @@ const Appointments = () => {
 
     if (selectedAppointmentIndex === -1) {
       setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000); // Muestra la alerta por 3 segundos
+      setTimeout(() => setShowAlert(false), 3000);
     } else {
       setSelectedAppointmentIndex(selectedAppointmentIndex);
       setIsUpdateModalOpen(true);
@@ -53,13 +53,17 @@ const Appointments = () => {
     const updatedAppointments = [...appointments];
     updatedAppointments[selectedAppointmentIndex] = { ...updatedAppointment, selected: false };
     setAppointments(updatedAppointments);
-    setIsUpdateModalOpen(false); // Cierra el modal después de editar
+    setIsUpdateModalOpen(false);
   };
 
-  // Nueva función para agregar una cita
   const handleAdd = (newAppointment) => {
-    setAppointments([...appointments, { ...newAppointment, selected: false }]); // Añadimos la nueva cita
-    setIsAddModalOpen(false); // Cierra el modal después de agregar
+    setAppointments([...appointments, { ...newAppointment, selected: false }]);
+    setIsAddModalOpen(false);
+  };
+
+  const handleDelete = (index) => {
+    const updatedAppointments = appointments.filter((_, i) => i !== index);
+    setAppointments(updatedAppointments);
   };
 
   return (
@@ -69,52 +73,59 @@ const Appointments = () => {
         <p className="text-muted-foreground">Esta sección muestra las citas médicas programadas.</p>
       </div>
 
-      {/* Botones de acciones */}
       <div className="flex justify-between">
-        <Button variant="contained" onClick={handleUpdate}>
+        <button 
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          onClick={handleUpdate}
+        >
           Actualizar Cita
-        </Button>
-        <Button variant="contained" onClick={() => setIsAddModalOpen(true)}> {/* Abre el modal para agregar cita */}
+        </button>
+        <button 
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+          onClick={() => setIsAddModalOpen(true)}
+        >
           Agregar Cita
-        </Button>
+        </button>
       </div>
 
-      {/* Alerta si no hay selección */}
       {showAlert && (
-        <Alert severity="error" onClose={() => setShowAlert(false)}>
-          Por favor, seleccione una cita antes de actualizar.
-        </Alert>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span className="block sm:inline">Por favor, seleccione una cita antes de actualizar.</span>
+        </div>
       )}
 
-      {/* Tabla de citas */}
-      <AppointmentTable appointments={appointments} onSelect={handleSelect} />
+      <AppointmentTable 
+        appointments={appointments} 
+        onSelect={handleSelect} 
+        onDelete={handleDelete}
+      />
 
-      {/* Modal para actualizar cita */}
       {isUpdateModalOpen && selectedAppointmentIndex !== null && (
-        <Dialog open={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)}>
-          <DialogTitle>Actualizar Cita</DialogTitle>
-          <DialogContent>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4">Actualizar Cita</h2>
             <AppointmentForm
               onSubmit={handleEdit}
-              appointmentToEdit={appointments[selectedAppointmentIndex]} // Cargamos los datos seleccionados
+              appointmentToEdit={appointments[selectedAppointmentIndex]}
               onClose={() => setIsUpdateModalOpen(false)}
               doctors={doctors}
             />
-          </DialogContent>
-        </Dialog>
+          </div>
+        </div>
       )}
 
-      {/* Modal para agregar nueva cita */}
-      <Dialog open={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
-        <DialogTitle>Agregar Nueva Cita</DialogTitle>
-        <DialogContent>
-          <AppointmentForm
-            onSubmit={handleAdd} // Envía la nueva cita al agregar
-            onClose={() => setIsAddModalOpen(false)}
-            doctors={doctors} // Pasamos la lista de doctores al formulario
-          />
-        </DialogContent>
-      </Dialog>
+      {isAddModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4">Agregar Nueva Cita</h2>
+            <AppointmentForm
+              onSubmit={handleAdd}
+              onClose={() => setIsAddModalOpen(false)}
+              doctors={doctors}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

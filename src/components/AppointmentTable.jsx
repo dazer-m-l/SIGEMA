@@ -1,46 +1,52 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Checkbox, Button } from '@mui/material';
 import { Trash2 } from 'lucide-react';
 
 const AppointmentTable = ({ appointments, onDelete, onSelect }) => {
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Seleccionar</TableCell>
-          <TableCell>Paciente</TableCell>
-          <TableCell>Fecha</TableCell>
-          <TableCell>Hora</TableCell>
-          <TableCell>Médico</TableCell>
-          <TableCell>Motivo</TableCell>
-          <TableCell>Estado</TableCell>
-          <TableCell>Acciones</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {appointments.map((appointment, index) => (
-          <TableRow key={index}>
-            <TableCell>
-              <Checkbox
-                checked={appointment.selected}
-                onChange={(e) => onSelect(index, e.target.checked)}
-              />
-            </TableCell>
-            <TableCell>{appointment.patientName}</TableCell>
-            <TableCell>{appointment.date}</TableCell>
-            <TableCell>{appointment.time}</TableCell>
-            <TableCell>{appointment.doctor}</TableCell>
-            <TableCell>{appointment.reason}</TableCell>
-            <TableCell>{appointment.status}</TableCell>
-            <TableCell>
-              <Button variant="text" onClick={() => onDelete(index)}>
-                <Trash2 />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seleccionar</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paciente</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Médico</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Motivo</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {appointments.map((appointment, index) => (
+            <tr key={index}>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-blue-600"
+                  checked={appointment.selected}
+                  onChange={(e) => onSelect(index, e.target.checked)}
+                />
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">{appointment.patientName}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{appointment.date}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{appointment.time}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{appointment.doctor}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{appointment.reason}</td>
+              <td className="px-6 py-4 whitespace-nowrap">{appointment.status}</td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <button
+                  onClick={() => onDelete(index)}
+                  className="text-red-600 hover:text-red-900"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
