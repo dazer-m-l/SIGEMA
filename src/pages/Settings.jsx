@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import "./settinf.css"
 
 const Settings = () => {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -21,36 +21,38 @@ const Settings = () => {
     document.body.classList.toggle('dark-mode');
   };
 
-  return (
+  return (  
     <div className="settings-container relative flex max-w-xs px-6 py2 ">
       <style>
       </style>
       {/* <div className="dropdown"> */}
         {/* <button id="ajustesBtn" onClick={toggleDropdown}>Ajustes</button> */}
-        
+        {/* PRIMER MODAL */}
         <div className={`settings-content shadow-md ring-0 z-10 w-full bg-white rounded-lg p-2 ring-gray-200 transition-opacity duration-300 ${activeModal ? 'opacity-50' : ''}`}>
         {/* {isDropdownOpen && ( */}
         {/* <h1>Configuración</h1> */}
-          <div className="dropdown-content text-sm text-center p-3">
+          <div className="dropdown-content text-sm text-center p-3 ">
+            <h1 className='text-2xl font-bold mb-4 text-center'>Configuracion</h1>
           <ul className='space-y-4 '>
-          <li><a className="" href="#generalModal" onClick={() => openModal('generalModal')}>General</a></li>
-          <hr className="border-gray-400 mb-4" />
-            <li><a href="#cuentaModal" onClick={() => openModal('cuentaModal')}>Cuenta</a></li>
+          <li><a className="block text-sm font-medium" href="#generalModal" onClick={() => openModal('generalModal')}>General</a></li>
+          <hr className="border-gray-400 mb-4 " />
+            <li><a className='block text-sm font-medium' href="#cuentaModal" onClick={() => openModal('cuentaModal')}>Cuenta</a></li>
             <hr className="border-gray-400 mb-4" />
-            <li><a href="#accesibilidadModal" onClick={() => openModal('accesibilidadModal')}>Accesibilidad</a></li>
+            <li><a className='block text-sm font-medium' href="#accesibilidadModal" onClick={() => openModal('accesibilidadModal')}>Accesibilidad</a></li>
             <hr className="border-gray-400 mb-4" />
-            <li><a href="#privacidadModal" onClick={() => openModal('privacidadModal')}>Privacidad</a></li>
+            <li><a className='block text-sm font-medium' href="#privacidadModal" onClick={() => openModal('privacidadModal')}>Privacidad</a></li>
           </ul>
             
           </div>
           
       </div>
+{/* MODALES SEGUNDOS */}
 
       {activeModal === 'generalModal' && (
-        <div id="generalModal" className="modal modal-desplazado mx-auto p-4 bg-white shadow-lg rounded-lg text-center modal absolute ring-0 w-64">
+        <div id="generalModal" className="modal modal-desplazado mx-auto p-4 bg-white shadow-lg rounded-lg text-center ">
           <h3 className='text-lg font-semibold mb-4'>Ajustes Generales</h3>
           <form>
-            <label className='block text-sm mb-2' htmlFor="unidades">Unidades de medida</label>
+            <label className='block text-sm mb-2' htmlFor="unidades">Unidades de medida</label> 
             <select id="unidades" className='w-full p-2 mb-4 border rounded'>
               <option value="kg">Kilogramos</option>
               <option value="lb">Libras</option>
