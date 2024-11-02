@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./settinf.css"; // Corregido el nombre del archivo de CSS
+import "../styles/settings.css";
 
 const Settings = () => {
   const [activeModal, setActiveModal] = useState(null);
