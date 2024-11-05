@@ -59,7 +59,7 @@ const StaffTable = ({ staffData, staffType, searchTerm, onEdit, onDelete }) => {
                     <i className="fas fa-edit mr-1"></i> Editar
                   </button>
                   <button
-                    onClick={() => onDelete(staff)}
+                    onClick={() => onDelete(staffType === 'medicos' ? staff.cedula_m : staff.curp_p)}
                     className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-150"
                   >
                     <i className="fas fa-trash-alt mr-1"></i> Borrar

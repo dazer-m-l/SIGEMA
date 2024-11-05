@@ -1,12 +1,14 @@
 import React from 'react';
 import Sidebar from './Sidebar';
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar />
-      <div className="flex-1 p-10 bg-gray-100"><Outlet/></div>
+      <div className="flex-1 p-10 bg-gray-100 overflow-y-auto">
+        <Outlet />
+      </div>
     </div>
   );
 };

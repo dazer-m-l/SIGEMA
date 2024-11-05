@@ -7,7 +7,6 @@ const StaffForm = ({ staffType, selectedStaff, isEditing, onCreate, onUpdate, on
         aPaterno_p: '',
         aMaterno_p: '',
         sexo_p: '',
-        curp_p: '',
         nss_p: '',
         direccion_p: '',
         ciudad_p: '',
@@ -17,7 +16,6 @@ const StaffForm = ({ staffType, selectedStaff, isEditing, onCreate, onUpdate, on
         nombre_m: '',
         aPaterno_m: '',
         aMaterno_m: '',
-        cedula_m: '',
         especialidad_m: '',
         telefono_m: '',
         eMail_m: '',
@@ -82,15 +80,6 @@ const StaffForm = ({ staffType, selectedStaff, isEditing, onCreate, onUpdate, on
               value={staff.aMaterno_p}
               onChange={handleChange}
               placeholder="Apellido Materno"
-              className="border rounded p-2 w-full"
-            />
-            <input
-              type="text"
-              name="curp_p"
-              value={staff.curp_p}
-              onChange={handleChange}
-              placeholder="CURP"
-              required
               className="border rounded p-2 w-full"
             />
             <input
@@ -164,15 +153,6 @@ const StaffForm = ({ staffType, selectedStaff, isEditing, onCreate, onUpdate, on
               value={staff.aMaterno_m}
               onChange={handleChange}
               placeholder="Apellido Materno"
-              className="border rounded p-2 w-full"
-            />
-            <input
-              type="text"
-              name="cedula_m"
-              value={staff.cedula_m}
-              onChange={handleChange}
-              placeholder="Cédula"
-              required
               className="border rounded p-2 w-full"
             />
             <input
