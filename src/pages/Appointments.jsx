@@ -1,127 +1,110 @@
-import React, { useState } from 'react';
-import { Trash2 } from 'lucide-react';
-import AppointmentForm from '../components/AppointmentForm';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import AppointmentTable from '../components/AppointmentTable';
+import AppointmentForm from '../components/AppointmentForm';
 
 const Appointments = () => {
-  const [appointments, setAppointments] = useState([
-    {
-      patientName: 'Juan Pérez',
-      patientId: '12345',
-      date: '2023-06-15',
-      time: '10:00',
-      doctor: '1',
-      reason: 'Chequeo anual',
-      status: 'Pendiente',
-      selected: false,
-    }
-    // Agrega más citas aquí si es necesario
-  ]);
-  
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(null);
-  const [showAlert, setShowAlert] = useState(false);
+  const [appointmentsData, setAppointmentsData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const doctors = [
-    { id: '1', name: 'Dr. García', specialty: 'Cardiología' },
-    { id: '2', name: 'Dra. Rodríguez', specialty: 'Pediatría' },
-    // Agrega más médicos aquí si es necesario
-  ];
-
-  const handleSelect = (index, checked) => {
-    const updatedAppointments = appointments.map((appointment, i) => ({
-      ...appointment,
-      selected: i === index ? checked : false,
-    }));
-    setAppointments(updatedAppointments);
-  };
-
-  const handleUpdate = () => {
-    const selectedAppointmentIndex = appointments.findIndex(appointment => appointment.selected);
-
-    if (selectedAppointmentIndex === -1) {
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000);
-    } else {
-      setSelectedAppointmentIndex(selectedAppointmentIndex);
-      setIsUpdateModalOpen(true);
+  const fetchAppointmentsData = async () => {
+    try {
+      const response = await axios.get('/api/citas');
+      console.log('Datos de la API:', response.data);
+      setAppointmentsData(Array.isArray(response.data.data) ? response.data.data : []);
+    } catch (error) {
+      console.error('Error fetching appointments data:', error);
+      setAppointmentsData([]); // Asegurarse de que sea un array en caso de error
     }
   };
 
-  const handleEdit = (updatedAppointment) => {
-    const updatedAppointments = [...appointments];
-    updatedAppointments[selectedAppointmentIndex] = { ...updatedAppointment, selected: false };
-    setAppointments(updatedAppointments);
-    setIsUpdateModalOpen(false);
+  useEffect(() => {
+    fetchAppointmentsData();
+  }, []);
+
+  const handleCreateAppointment = async (newAppointment) => {
+    try {
+      await axios.post('/api/citas', newAppointment);
+      fetchAppointmentsData();
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error creating appointment:', error);
+    }
   };
 
-  const handleAdd = (newAppointment) => {
-    setAppointments([...appointments, { ...newAppointment, selected: false }]);
-    setIsAddModalOpen(false);
+  const handleUpdateAppointment = async (updatedAppointment) => {
+    try {
+      await axios.put(`/api/citas/${updatedAppointment.id_cita}`, updatedAppointment);
+      fetchAppointmentsData();
+      setShowModal(false);
+      setSelectedAppointment(null); // Limpiar la selección
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating appointment:', error);
+    }
   };
 
-  const handleDelete = (index) => {
-    const updatedAppointments = appointments.filter((_, i) => i !== index);
-    setAppointments(updatedAppointments);
+  const handleDeleteAppointment = async (id) => {
+    try {
+      await axios.delete(`/api/citas/${id}`);
+      fetchAppointmentsData();
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleEditAppointment = (appointment) => {
+    setSelectedAppointment(appointment);
+    setIsEditing(true);
+    setShowModal(true);
   };
 
   return (
-    <div className="space-y-8 p-4 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">Citas Médicas</h1>
-        <p className="text-muted-foreground">Esta sección muestra las citas médicas programadas.</p>
-      </div>
+    <div className="p-4">
+      <p className="text-lg font-bold mb-4">Gestión de Citas</p>
 
-      <div className="flex justify-between">
-        <button 
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-          onClick={handleUpdate}
+      <div className="flex items-center justify-between mb-6">
+        
+        <button
+          onClick={() => {
+            setSelectedAppointment(null);
+            setIsEditing(false);
+            setShowModal(true);
+          }}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md m-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Actualizar Cita
-        </button>
-        <button 
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-          onClick={() => setIsAddModalOpen(true)}
-        >
-          Agregar Cita
+          Crear Nuevo
         </button>
       </div>
 
-      {showAlert && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <span className="block sm:inline">Por favor, seleccione una cita antes de actualizar.</span>
-        </div>
-      )}
-
-      <AppointmentTable 
-        appointments={appointments} 
-        onSelect={handleSelect} 
-        onDelete={handleDelete}
+      <AppointmentTable
+        appointments={appointmentsData}
+        searchTerm={searchTerm}
+        onDelete={handleDeleteAppointment}
+        onEdit={handleEditAppointment} // Pasar la función de edición
       />
 
-      {isUpdateModalOpen && selectedAppointmentIndex !== null && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Actualizar Cita</h2>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>
             <AppointmentForm
-              onSubmit={handleEdit}
-              appointmentToEdit={appointments[selectedAppointmentIndex]}
-              onClose={() => setIsUpdateModalOpen(false)}
-              doctors={doctors}
-            />
-          </div>
-        </div>
-      )}
-
-      {isAddModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Agregar Nueva Cita</h2>
-            <AppointmentForm
-              onSubmit={handleAdd}
-              onClose={() => setIsAddModalOpen(false)}
-              doctors={doctors}
+              selectedAppointment={selectedAppointment}
+              isEditing={isEditing}
+              onCreate={handleCreateAppointment}
+              onUpdate={handleUpdateAppointment}
+              onCancel={() => {
+                setShowModal(false);
+                setSelectedAppointment(null);
+                setIsEditing(false);
+              }}
             />
           </div>
         </div>
