@@ -38,7 +38,7 @@ const Staff = () => {
 
   const handleUpdateStaff = async (updatedStaff) => {
     try {
-      const endpoint = staffType === 'medicos' ? `/api/medicos/${updatedStaff.cedula}` : `/api/pacientes/${updatedStaff.curp}`;
+      const endpoint = staffType === 'medicos' ? `/api/medicos/${updatedStaff.cedula_m}` : `/api/pacientes/${updatedStaff.curp_p}`;
       await axios.put(endpoint, updatedStaff);
       fetchStaffData();
       setShowModal(false);
