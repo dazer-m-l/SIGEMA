@@ -1,192 +1,104 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import HistoryTable from '../components/HistoryTable';
 
-const History = () => {
-  // const [formData] = useState({});
+
+const Appointments = () => {
+  const [appointmentsData, setAppointmentsData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const fetchAppointmentsData = async () => {
+    try {
+      const response = await axios.get('/api/citas');
+      console.log('Datos de la API:', response.data);
+      setAppointmentsData(Array.isArray(response.data.data) ? response.data.data : []);
+    } catch (error) {
+      console.error('Error fetching appointments data:', error);
+      setAppointmentsData([]); // Asegurarse de que sea un array en caso de error
+    }
+  };
+
+  useEffect(() => {
+    fetchAppointmentsData();
+  }, []);
+
+  const handleCreateAppointment = async (newAppointment) => {
+    try {
+      await axios.post('/api/citas', newAppointment);
+      fetchAppointmentsData();
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error creating appointment:', error);
+    }
+  };
+
+  const handleUpdateAppointment = async (updatedAppointment) => {
+    try {
+      await axios.put(`/api/citas/${updatedAppointment.id_cita}`, updatedAppointment);
+      fetchAppointmentsData();
+      setShowModal(false);
+      setSelectedAppointment(null); // Limpiar la selección
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating appointment:', error);
+    }
+  };
+
+  const handleDeleteAppointment = async (id) => {
+    try {
+      await axios.delete(`/api/citas/${id}`);
+      fetchAppointmentsData();
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleEditAppointment = (appointment) => {
+    setSelectedAppointment(appointment);
+    setIsEditing(true);
+    setShowModal(true);
+  };
+
   return (
-    <div>
-     
-      <div className="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-lg">
-        <h2 className="text-3xl font-bold mb-6 text-center">Historial Médico</h2>
-        <form>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium">Nombre</label>
-              <input
-                type="text"
-                name="nombre"
-                // value={formData.nombre}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Nombre"
-              />
-            </div>
+    <div className="p-4">
+      <p className="text-lg font-bold mb-4">Historial de Citas</p>
 
-            <div>
-              <label className="block text-sm font-medium">Apellido Paterno</label>
-              <input
-                type="text"
-                name="apellidoPaterno"
-                // value={formData.apellidoPaterno}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Apellido Paterno"
-              />
-            </div>
+      
 
-            <div>
-              <label className="block text-sm font-medium">Apellido Materno</label>
-              <input
-                type="text"
-                name="apellidoMaterno"
-                // value={formData.apellidoMaterno}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Apellido Materno"
-              />
-            </div>
+      <HistoryTable
+        appointments={appointmentsData}
+        searchTerm={searchTerm}
+        onDelete={handleDeleteAppointment}
+        onEdit={handleEditAppointment} // Pasar la función de edición
+      />
 
-            <div>
-              <label className="block text-sm font-medium">Fecha de Nacimiento</label>
-              <input
-                type="date"
-                name="fechaNacimiento"
-                // value={formData.fechaNacimiento}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Teléfono</label>
-              <input
-                type="tel"
-                name="telefono"
-                // value={formData.telefono}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Teléfono"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Fecha de Consulta</label>
-              <input
-                type="date"
-                name="fechaConsulta"
-                // value={formData.fechaConsulta}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Enfermedades</label>
-              <input
-                type="text"
-                name="enfermedades"
-                // value={formData.enfermedades}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enfermedades"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Alergias</label>
-              <input
-                type="text"
-                name="alergias"
-                // value={formData.alergias}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Alergias"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Operaciones</label>
-              <input
-                type="text"
-                name="operaciones"
-                // value={formData.operaciones}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Operaciones"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Tipo de Sangre</label>
-              <select
-                name="tipoSangre"
-                // value={formData.tipoSangre}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Seleccione</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Medicamento de Consulta</label>
-              <input
-                type="text"
-                name="medicamentoConsulta"
-                // value={formData.medicamentoConsulta}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Medicamento"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Exámenes de Consulta</label>
-              <input
-                type="text"
-                name="examenesConsulta"
-                // value={formData.examenesConsulta}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Exámenes"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">CURP</label>
-              <input
-                type="text"
-                name="curp"
-                // value={formData.curp}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="CURP"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium">Cédula</label>
-              <input
-                type="text"
-                name="cedula"
-                // value={formData.cedula}
-                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Cédula"
-              />
-            </div>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>
+            <AppointmentForm
+              selectedAppointment={selectedAppointment}
+              isEditing={isEditing}
+              onCreate={handleCreateAppointment}
+              onUpdate={handleUpdateAppointment}
+              onCancel={() => {
+                setShowModal(false);
+                setSelectedAppointment(null);
+                setIsEditing(false);
+              }}
+            />
           </div>
-          <div className="flex justify-center mt-8 space-x-6">
-            <button
-              type="button"
-              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Guardar
-            </button>
-            <button
-              type="button"
-              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-            >
-              Eliminar
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default History;
+export default Appointments;
