@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';  // Importa motion y AnimatePresence
 import AppointmentTable from '../components/AppointmentTable';
 import AppointmentForm from '../components/AppointmentForm';
 
@@ -47,12 +48,18 @@ const Appointments = () => {
     }
   };
 
+  // Función para eliminar una cita con confirmación usando window.confirm
   const handleDeleteAppointment = async (id) => {
-    try {
-      await axios.delete(`/api/citas/${id}`);
-      fetchAppointmentsData();
-    } catch (error) {
-      console.error('Error deleting appointment:', error);
+    const isConfirmed = window.confirm('¿Deseas eliminar este registro?');
+    if (isConfirmed) {
+      try {
+        await axios.delete(`/api/citas/${id}`);
+        alert("¡Eliminado con éxito!");  // Mensaje de éxito
+        fetchAppointmentsData(); // Refrescar la lista de citas
+      } catch (error) {
+        alert("Hubo un problema al eliminar el registro.");  // Mensaje de error
+        console.error('Error deleting appointment:', error);
+      }
     }
   };
 
@@ -71,7 +78,6 @@ const Appointments = () => {
       <p className="text-lg font-bold mb-4">Gestión de Citas</p>
 
       <div className="flex items-center justify-between mb-6">
-        
         <button
           onClick={() => {
             setSelectedAppointment(null);
@@ -87,28 +93,36 @@ const Appointments = () => {
       <AppointmentTable
         appointments={appointmentsData}
         searchTerm={searchTerm}
-        onDelete={handleDeleteAppointment}
-        onEdit={handleEditAppointment} // Pasar la función de edición
+        onDelete={handleDeleteAppointment}  // Pasar la función de eliminación
+        onEdit={handleEditAppointment}
       />
 
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>
-            <AppointmentForm
-              selectedAppointment={selectedAppointment}
-              isEditing={isEditing}
-              onCreate={handleCreateAppointment}
-              onUpdate={handleUpdateAppointment}
-              onCancel={() => {
-                setShowModal(false);
-                setSelectedAppointment(null);
-                setIsEditing(false);
-              }}
-            />
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+            initial={{ opacity: 0, scale: 0.9 }}  // Animación de inicio (más pequeño y opaco)
+            animate={{ opacity: 1, scale: 1 }}  // Animación de llegada (normal)
+            exit={{ opacity: 0, scale: 0.9 }}  // Animación de salida (más pequeño y opaco)
+            transition={{ duration: 0.3 }}  // Duración de la animación
+          >
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+              <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>
+              <AppointmentForm
+                selectedAppointment={selectedAppointment}
+                isEditing={isEditing}
+                onCreate={handleCreateAppointment}
+                onUpdate={handleUpdateAppointment}
+                onCancel={() => {
+                  setShowModal(false);
+                  setSelectedAppointment(null);
+                  setIsEditing(false);
+                }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
