@@ -73,6 +73,36 @@ const Appointments = () => {
     setShowModal(true);
   };
 
+  // Función para cerrar el modal
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedAppointment(null);
+    setIsEditing(false);
+  };
+
+  // Cerrar el modal cuando el usuario haga clic fuera del modal
+  const handleOutsideClick = (e) => {
+    if (e.target.id === 'modal-background') {
+      handleCloseModal();
+    }
+  };
+
+  // Cerrar el modal cuando se presiona la tecla ESC
+  useEffect(() => {
+    const handleEscapeKey = (e) => {
+      if (e.key === 'Escape') {
+        handleCloseModal();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, []);
+
   return (
     <div className="p-4">
       <p className="text-lg font-bold mb-4">Gestión de Citas</p>
@@ -100,24 +130,22 @@ const Appointments = () => {
       <AnimatePresence>
         {showModal && (
           <motion.div
+            id="modal-background"
             className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
             initial={{ opacity: 0, scale: 0.9 }}  // Animación de inicio (más pequeño y opaco)
             animate={{ opacity: 1, scale: 1 }}  // Animación de llegada (normal)
             exit={{ opacity: 0, scale: 0.9 }}  // Animación de salida (más pequeño y opaco)
             transition={{ duration: 0.3 }}  // Duración de la animación
+            onClick={handleOutsideClick}  // Detectar clic fuera del modal
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" onClick={(e) => e.stopPropagation()}>
               <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>
               <AppointmentForm
                 selectedAppointment={selectedAppointment}
                 isEditing={isEditing}
                 onCreate={handleCreateAppointment}
                 onUpdate={handleUpdateAppointment}
-                onCancel={() => {
-                  setShowModal(false);
-                  setSelectedAppointment(null);
-                  setIsEditing(false);
-                }}
+                onCancel={handleCloseModal}
               />
             </div>
           </motion.div>

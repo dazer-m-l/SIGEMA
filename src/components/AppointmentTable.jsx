@@ -64,6 +64,7 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
           onChange={handleSearch}
           placeholder="Buscar por CURP, motivo o estado"
           className="px-4 py-2 border border-gray-300 rounded-md"
+          style={{ width: '50%' }} // Esto hace que el input ocupe todo el ancho disponible
         />
       </div>
 
