@@ -23,6 +23,19 @@
     margin-top: 20px;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
+  /* body.dark-mode {
+    background-color: black;
+    color: white;
+}
+
+body.dark-mode .modal {
+    background-color: black;
+    color: white;
+}
+
+button {
+    margin-top: 10px;
+} */
    /* .modal-desplazado {
     margin-top: 100px;
   } */
@@ -46,3 +59,49 @@
   /* .settings-content {
     flex: 1;
   }  */
+    /* Contenedor del interruptor */
+    /* body.dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    } */
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+
+    
+.theme-toggle-switch {
+  position: relative;
+  width: 60px;
+  height: 34px;
+}
+.theme-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 50px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 26px;
+width: 26px;
+border-radius: 50px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+transition: 0.4s;
+}

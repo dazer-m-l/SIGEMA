@@ -9,6 +9,11 @@ const Appointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [dateRange,setDateRange] = useState("")
+  const [endDate, setEndDate] = useState("")
+  const [startDate, setStartDate] = useState(""
+  
+  )
 
   const fetchAppointmentsData = async () => {
     try {
@@ -45,7 +50,7 @@ const Appointments = () => {
     } catch (error) {
       console.error('Error updating appointment:', error);
     }
-  };
+  };  
 
   const handleDeleteAppointment = async (id) => {
     try {
@@ -59,21 +64,122 @@ const Appointments = () => {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
-
-  const handleEditAppointment = (appointment) => {
-    setSelectedAppointment(appointment);
-    setIsEditing(true);
-    setShowModal(true);
+  const handleDateRangeChange = (e) => {
+    setDateRange(e.target.value);
+    if (e.target.value !== 'personalizado') {
+      setStartDate('');
+      setEndDate('');
+    }
   };
+
+
+  
+  const handleEditAppointment = (appointment) => {
+    const selectedRange = e.target.value;
+    setDateRange(selectedRange);
+    setSelectedAppointment(appointment);
+    if (selectedRange !== 'personalizado') {
+      setStartDate('');
+      setEndDate('');
+    }
+    // setIsEditing(true);
+    // setShowModal(true);
+  };
+  const getDateFilter = (appointment) => {
+    const appointmentDate = new Date(appointment.date); // Cambio de nombre para evitar el conflicto
+    const today = new Date();
+  
+    switch (dateRange) {
+      case 'dia':
+        return appointmentDate.toDateString() === today.toDateString();
+      case 'semana':
+        const oneWeekAgo = new Date(today);
+        oneWeekAgo.setDate(today.getDate() - 7);
+        return appointmentDate >= oneWeekAgo && appointmentDate <= today;
+      case 'mes':
+        const oneMonthAgo = new Date(today);
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+        return appointmentDate >= oneMonthAgo && appointmentDate <= today;
+      case 'año':
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+        return appointmentDate >= oneYearAgo && appointmentDate <= today;
+      case 'personalizado':
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        return appointmentDate >= start && appointmentDate <= end;
+      default:
+        return true;
+    }
+  };
+  
+  
+
+  const filteredAppointments = appointmentsData.filter((appointment) => {
+    const matchesSearchTerm = searchTerm
+      ? appointment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        appointment.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        appointment.date.includes(searchTerm)
+      : true;
+
+    return matchesSearchTerm && getDateFilter(appointment);
+  });
+  // const handleEditAppointment = (appointment) => {
+  //   setSelectedAppointment(appointment);
+  //   setIsEditing(true);
+  //   setShowModal(true);
+  // };
 
   return (
     <div className="p-4">
       <p className="text-lg font-bold mb-4">Historial de Citas</p>
+      <div className='mb-4 flex items-center'>
+        <input
+          type='text' 
+          placeholder='Buscar'
+          value={searchTerm}
+          onChange={handleSearch}
+          className='border p-2 rounded mr-2'
+        />
+        <select
+          value={dateRange}
+          onChange={handleDateRangeChange}
+          className='border p-2 rounded mr-2'
+          >
+            <option value="">Filtrar por </option>
+            <option value="dia">Dia</option>
+            <option value="semana">Semana</option>
+            <option value="mes">Mes</option>
+            <option value="año">Año</option>
+            <option value="personalizado">Personalizado</option>
 
+        </select>
+        {dateRange === 'personalizado' && (
+        <div className="mb-4">
+          <label className="block">Fecha de inicio</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border p-2 rounded"
+            required
+          />
+          <label className="block mt-2">Fecha de fin</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border p-2 rounded ml-2"
+            required
+          />
+        </div>
+        )}
+        </div>
       
 
       <HistoryTable
-        appointments={appointmentsData}
+        appointments={filteredAppointments}
+        // appointments={appointmentsData}
         searchTerm={searchTerm}
         onDelete={handleDeleteAppointment}
         onEdit={handleEditAppointment} // Pasar la función de edición
@@ -93,11 +199,14 @@ const Appointments = () => {
                 setSelectedAppointment(null);
                 setIsEditing(false);
               }}
+              
             />
           </div>
         </div>
       )}
+      
     </div>
+    
   );
 };
 

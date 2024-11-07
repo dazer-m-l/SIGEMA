@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "../styles/settings.css";
+// import { settings } from ''; 
 
 const Settings = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -49,10 +50,12 @@ const Settings = () => {
               <option value="24hrs">24hrs</option>
             </select>
             <label className='block text-sm mb-2'>Cambiar Tema:</label>
-            <button className='color-scheme-toggler' type='button' onClick={toggleDarkMode}>
-              <span role="img" aria-label="modo claro" className="color-scheme-toggler" aria-hidden="true">🌝</span>
-              <span role='img' aria-label='modo oscuro' className="color-scheme-toggler" aria-hidden="true">🌚</span>
-            </button>
+            <div className="theme-toggle-container">
+            <label className="theme-toggle-switch">
+                <input type="checkbox" onChange={toggleDarkMode} />
+                <span className="slider"></span>
+            </label>
+            </div>
             <div className="modal-buttons">
               <button type="button" className="cancelar px-4 py-2 bg-red-400 rounded" onClick={closeModal}>Cancelar</button>
               <button type="button" className="guardar px-4 py-2 bg-blue-400 rounded" onClick={() => alert('Cambios guardados correctamente')}>Guardar</button>
