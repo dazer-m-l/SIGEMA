@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Trash2, Edit2 } from 'lucide-react';
 
-const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
+const AppointmentTable = ({ appointments = [], onDelete, onEdit, onCreateAppointment }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateFilter, setDateFilter] = useState('all'); 
   const [startDate, setStartDate] = useState('');
@@ -94,56 +94,50 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
           </div>
         )}
       </div>
-      <br />
-      <hr style={{ border: '2px solid black' }} />
 
-      <br />
-
+      {/* Botón Crear Nueva Cita */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={onCreateAppointment}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Crear Nueva Cita
+        </button>
+      </div>
+        <br />
       <table className="min-w-full bg-white border border-gray-300 rounded-2xl shadow-xl">
-        <thead className="bg-blue-200 border-b-2 border-blue-300 rounded-t-2xl">
+        <thead>
           <tr>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-blue-300">CURP Paciente</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-blue-300">Fecha de Cita</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-blue-300">Cédula Médico</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-blue-300">Motivo</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-r border-blue-300">Estado</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Acciones</th>
+            <th className="px-4 py-2 border-b">Fecha</th>
+            <th className="px-4 py-2 border-b">Motivo</th>
+            <th className="px-4 py-2 border-b">Estado</th>
+            <th className="px-4 py-2 border-b">Paciente (CURP)</th>
+            <th className="px-4 py-2 border-b">Acciones</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {filteredAppointments.length > 0 ? (
-            filteredAppointments.map((appointment, index) => (
-              <tr key={appointment.id_cita || index} className="border-b border-gray-300 last:border-none">
-                <td className="px-4 py-4 whitespace-nowrap border-r border-gray-300">{appointment.curp_p}</td>
-                <td className="px-4 py-4 whitespace-nowrap border-r border-gray-300">{new Date(appointment.fecha_cita).toLocaleString()}</td>
-                <td className="px-4 py-4 whitespace-nowrap border-r border-gray-300">{appointment.cedula_m}</td>
-                <td className="px-4 py-4 border-r border-gray-300">{appointment.motivo_cita}</td>
-                <td className="px-4 py-4 whitespace-nowrap border-r border-gray-300">{appointment.estado_cita}</td>
-                <td className="px-4 py-4 whitespace-nowrap flex space-x-2">
-                  <button
-                    onClick={() => onEdit(appointment)}
-                    className="text-blue-600 hover:text-blue-900"
-                    title="Actualizar"
-                  >
-                    <Edit2 className="h-5 w-5" />
-                  </button>
-                  <button
-                    onClick={() => onDelete(appointment.id_cita)}
-                    className="text-red-600 hover:text-red-900"
-                    title="Eliminar"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center py-4 text-gray-500 border-b border-gray-300">
-                No hay registros.
+        <tbody>
+          {filteredAppointments.map((appointment) => (
+            <tr key={appointment.id_cita}>
+              <td className="px-4 py-2 border-b">{appointment.fecha_cita}</td>
+              <td className="px-4 py-2 border-b">{appointment.motivo_cita}</td>
+              <td className="px-4 py-2 border-b">{appointment.estado_cita}</td>
+              <td className="px-4 py-2 border-b">{appointment.curp_p}</td>
+              <td className="px-4 py-2 border-b flex items-center space-x-2">
+                <button
+                  onClick={() => onEdit(appointment)}
+                  className="text-blue-500 hover:text-blue-700"
+                >
+                  <Edit2 size={18} />
+                </button>
+                <button
+                  onClick={() => onDelete(appointment.id_cita)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <Trash2 size={18} />
+                </button>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>

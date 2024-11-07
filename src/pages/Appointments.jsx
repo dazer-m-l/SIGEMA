@@ -48,7 +48,6 @@ const Appointments = () => {
     }
   };
 
-  // Función para eliminar una cita con confirmación usando window.confirm
   const handleDeleteAppointment = async (id) => {
     const isConfirmed = window.confirm('¿Deseas eliminar este registro?');
     if (isConfirmed) {
@@ -63,31 +62,24 @@ const Appointments = () => {
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
   const handleEditAppointment = (appointment) => {
     setSelectedAppointment(appointment);
     setIsEditing(true);
     setShowModal(true);
   };
 
-  // Función para cerrar el modal
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedAppointment(null);
     setIsEditing(false);
   };
 
-  // Cerrar el modal cuando el usuario haga clic fuera del modal
   const handleOutsideClick = (e) => {
     if (e.target.id === 'modal-background') {
       handleCloseModal();
     }
   };
 
-  // Cerrar el modal cuando se presiona la tecla ESC
   useEffect(() => {
     const handleEscapeKey = (e) => {
       if (e.key === 'Escape') {
@@ -97,7 +89,6 @@ const Appointments = () => {
 
     document.addEventListener('keydown', handleEscapeKey);
 
-    // Limpiar el evento al desmontar el componente
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
@@ -106,25 +97,19 @@ const Appointments = () => {
   return (
     <div className="p-4">
       <p className="text-lg font-bold mb-4">Gestión de Citas</p>
-
-      <div className="flex items-center justify-between mb-6">
-        <button
-          onClick={() => {
-            setSelectedAppointment(null);
-            setIsEditing(false);
-            setShowModal(true);
-          }}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md m-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Crear Nuevo
-        </button>
-      </div>
+      <hr className="border-t-2 border-blue-500 my-4" />
+      <br />
 
       <AppointmentTable
         appointments={appointmentsData}
         searchTerm={searchTerm}
-        onDelete={handleDeleteAppointment}  // Pasar la función de eliminación
+        onDelete={handleDeleteAppointment}
         onEdit={handleEditAppointment}
+        onCreateAppointment={() => {
+          setSelectedAppointment(null);
+          setIsEditing(false);
+          setShowModal(true);
+        }}
       />
 
       <AnimatePresence>
@@ -132,11 +117,11 @@ const Appointments = () => {
           <motion.div
             id="modal-background"
             className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
-            initial={{ opacity: 0, scale: 0.9 }}  // Animación de inicio (más pequeño y opaco)
-            animate={{ opacity: 1, scale: 1 }}  // Animación de llegada (normal)
-            exit={{ opacity: 0, scale: 0.9 }}  // Animación de salida (más pequeño y opaco)
-            transition={{ duration: 0.3 }}  // Duración de la animación
-            onClick={handleOutsideClick}  // Detectar clic fuera del modal
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            onClick={handleOutsideClick}
           >
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" onClick={(e) => e.stopPropagation()}>
               <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>

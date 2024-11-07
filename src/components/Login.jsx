@@ -21,7 +21,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-gray-100">
+    <div className="h-screen flex justify-center items-center bg-gray-100 " style={{ backgroundColor: '#8ECAE6' }}>
       <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold text-center mb-6">Iniciar Sesión</h2>
         {error && <p className="text-red-600 text-center">{error}</p>}

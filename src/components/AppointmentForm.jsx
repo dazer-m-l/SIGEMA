@@ -6,39 +6,26 @@ const AppointmentForm = ({ selectedAppointment, isEditing, onCreate, onUpdate, o
     curp_p: '',
     fecha_cita: '',
     cedula_m: '',
-    motivo_cita: '',
+    motivo_cita: '', // Campo de entrada para el motivo
     estado_cita: ''
   });
 
   const [curpsPacientes, setCurpsPacientes] = useState([]);
   const [cedulasMedicos, setCedulasMedicos] = useState([]);
-  const [especialidades, setEspecialidades] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener las CURPs de los pacientes
         const pacientesResponse = await axios.get('/api/pacientes');
-        console.log('Respuesta de la API de pacientes:', pacientesResponse.data);
-
         if (pacientesResponse.data.success && Array.isArray(pacientesResponse.data.data)) {
           const curps = pacientesResponse.data.data.map(paciente => paciente.curp_p);
           setCurpsPacientes(curps);
-        } else {
-          console.error('La respuesta de la API de pacientes no es válida:', pacientesResponse.data);
         }
 
-        // Obtener las cédulas de los médicos
         const medicosResponse = await axios.get('/api/medicos');
-        console.log('Respuesta de la API de médicos:', medicosResponse.data);
-
         if (medicosResponse.data.success && Array.isArray(medicosResponse.data.data)) {
           const cedulas = medicosResponse.data.data.map(medico => medico.cedula_m);
           setCedulasMedicos(cedulas);
-          const especialidades = medicosResponse.data.data.map(medico => medico.especialidad_m);
-          setEspecialidades([...new Set(especialidades)]); // Eliminar duplicados
-        } else {
-          console.error('La respuesta de la API de médicos no es válida:', medicosResponse.data);
         }
       } catch (error) {
         console.error('Error al obtener los datos de la base de datos:', error);
@@ -52,10 +39,10 @@ const AppointmentForm = ({ selectedAppointment, isEditing, onCreate, onUpdate, o
     if (isEditing && selectedAppointment) {
       const fechaCita = new Date(selectedAppointment.fecha_cita);
       const formattedDateTime = `${fechaCita.getFullYear()}-${(fechaCita.getMonth() + 1).toString().padStart(2, '0')}-${fechaCita.getDate().toString().padStart(2, '0')}T${fechaCita.getHours().toString().padStart(2, '0')}:${fechaCita.getMinutes().toString().padStart(2, '0')}`;
-      
+
       setFormData({
         curp_p: selectedAppointment.curp_p,
-        fecha_cita: formattedDateTime, // Fecha y hora en formato local
+        fecha_cita: formattedDateTime,
         cedula_m: selectedAppointment.cedula_m,
         motivo_cita: selectedAppointment.motivo_cita,
         estado_cita: selectedAppointment.estado_cita,
@@ -134,18 +121,14 @@ const AppointmentForm = ({ selectedAppointment, isEditing, onCreate, onUpdate, o
       </div>
       <div>
         <label className="block mb-2">Motivo</label>
-        <select
+        <input
+          type="text"
           name="motivo_cita"
           value={formData.motivo_cita}
           onChange={handleChange}
           className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
           required
-        >
-          <option value="">Seleccionar Especialidad</option>
-          {especialidades.map((especialidad, index) => (
-            <option key={index} value={especialidad}>{especialidad}</option>
-          ))}
-        </select>
+        />
       </div>
       <div>
         <label className="block mb-2">Estado</label>
