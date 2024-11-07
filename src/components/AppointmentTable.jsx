@@ -3,7 +3,7 @@ import { Trash2, Edit2 } from 'lucide-react';
 
 const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [dateFilter, setDateFilter] = useState('all'); // Estado para el filtro de fecha
+  const [dateFilter, setDateFilter] = useState('all'); 
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -11,7 +11,6 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
     setSearchTerm(event.target.value);
   };
 
-  // Función para filtrar las citas por fecha
   const filterByDate = (appointment) => {
     const appointmentDate = new Date(appointment.fecha_cita);
 
@@ -22,9 +21,9 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
 
     if (dateFilter === 'week') {
       const startOfWeek = new Date();
-      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Inicio de la semana (domingo)
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
       const endOfWeek = new Date();
-      endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay())); // Fin de la semana (sábado)
+      endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay()));
       return appointmentDate >= startOfWeek && appointmentDate <= endOfWeek;
     }
 
@@ -44,10 +43,9 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
       return appointmentDate >= start && appointmentDate <= end;
     }
 
-    return true; // Si no hay filtro, no se filtra por fecha
+    return true;
   };
 
-  // Filtrar las citas según el término de búsqueda y el filtro de fecha
   const filteredAppointments = appointments.filter((appointment) => {
     const matchesSearchTerm = appointment.curp_p.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                appointment.motivo_cita.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -57,18 +55,14 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="mb-4">
+      <div className="mb-4 flex items-center space-x-4">
         <input
           type="text"
           value={searchTerm}
           onChange={handleSearch}
           placeholder="Buscar por CURP, motivo o estado"
-          className="px-4 py-2 border border-gray-300 rounded-md"
-          style={{ width: '50%' }} // Esto hace que el input ocupe todo el ancho disponible
+          className="px-4 py-2 border border-gray-300 rounded-md w-1/2"
         />
-      </div>
-
-      <div className="mb-4">
         <label htmlFor="dateFilter" className="mr-2">Filtrar por fecha:</label>
         <select
           id="dateFilter"
@@ -83,27 +77,27 @@ const AppointmentTable = ({ appointments = [], onDelete, onEdit }) => {
           <option value="year">Este año</option>
           <option value="custom">Personalizado</option>
         </select>
+        {dateFilter === 'custom' && (
+          <div className="flex space-x-2">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md"
+            />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+        )}
       </div>
+      <br />
+      <hr style={{ border: '2px solid black' }} />
 
-      {/* Inputs para el filtro personalizado */}
-      {dateFilter === 'custom' && (
-        <div className="flex space-x-2 mb-4">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Desde"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Hasta"
-          />
-        </div>
-      )}
+      <br />
 
       <table className="min-w-full bg-white border border-gray-300 rounded-2xl shadow-xl">
         <thead className="bg-blue-200 border-b-2 border-blue-300 rounded-t-2xl">
