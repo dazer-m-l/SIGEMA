@@ -6,7 +6,7 @@ const AppointmentForm = ({ selectedAppointment, isEditing, onCreate, onUpdate, o
     curp_p: '',
     fecha_cita: '',
     cedula_m: '',
-    motivo_cita: '', // Campo de entrada para el motivo
+    motivo_cita: '',
     estado_cita: ''
   });
 
@@ -39,7 +39,6 @@ const AppointmentForm = ({ selectedAppointment, isEditing, onCreate, onUpdate, o
     if (isEditing && selectedAppointment) {
       const fechaCita = new Date(selectedAppointment.fecha_cita);
       const formattedDateTime = `${fechaCita.getFullYear()}-${(fechaCita.getMonth() + 1).toString().padStart(2, '0')}-${fechaCita.getDate().toString().padStart(2, '0')}T${fechaCita.getHours().toString().padStart(2, '0')}:${fechaCita.getMinutes().toString().padStart(2, '0')}`;
-
       setFormData({
         curp_p: selectedAppointment.curp_p,
         fecha_cita: formattedDateTime,
@@ -68,10 +67,17 @@ const AppointmentForm = ({ selectedAppointment, isEditing, onCreate, onUpdate, o
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Convertir fecha a UTC antes de enviar
+    const appointmentData = {
+      ...formData,
+      fecha_cita: new Date(formData.fecha_cita).toISOString()
+    };
+
     if (isEditing) {
-      onUpdate({ ...selectedAppointment, ...formData });
+      onUpdate({ ...selectedAppointment, ...appointmentData });
     } else {
-      onCreate(formData);
+      onCreate(appointmentData);
     }
     onCancel();
   };
