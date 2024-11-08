@@ -1,10 +1,16 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // Asegúrate de incluir todas las rutas donde usas Tailwind
+    './src/**/*.{html,js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      // Si quieres extender la paleta de colores o cualquier otra cosa, lo haces aquí
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('tailwindcss-filters'), 
+  ],
 }
