@@ -1,5 +1,6 @@
 .modal.modal-desplazado {
     width: 80%;
+    /* position: absolute; */
     max-width: 600px;
     margin: 0;
     position: fixed;
@@ -13,6 +14,7 @@
   .settings-content {
     margin-top: 85px;
     margin-right: 10px;
+    z-index: 1001;
   }
   .modal {
     flex: 2;
@@ -21,6 +23,8 @@
     width: 600px;
     padding: 20px;
     margin-top: 20px;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
   /* body.dark-mode {
@@ -104,4 +108,25 @@ left: 4px;
 bottom: 4px;
 background-color: white;
 transition: 0.4s;
+}
+
+/* .light-theme{
+  background-color: white;
+  color: black;
+}
+
+.dark-theme{
+  background-color: black;
+  color: white;
+} */
+.light-theme .settings-content{
+  background-color: white;
+  color:black;
+}
+.dark-theme .settings-content{
+  background-color: white;
+  color:black;
+}
+.modal-buttons button{
+  color: white;
 }
