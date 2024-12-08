@@ -18,6 +18,7 @@
     "axios": "^1.7.7",
     "firebase": "^10.14.0",
     "framer-motion": "^11.11.11",
+    "highcharts-accessibility": "^0.1.7",
     "lucide-react": "^0.451.0",
     "nodemon": "^3.1.7",
     "react": "^18.3.1",
