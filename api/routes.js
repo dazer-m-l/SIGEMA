@@ -6,7 +6,9 @@ const {
     getPaciente,
     createPaciente,
     updatePaciente,
-    deletePaciente
+    deletePaciente,
+    getProfile,
+    updateProfileImage
 } = require('./controllers/pacienteController');
 
 const {
@@ -90,5 +92,10 @@ router.route('/historial-medico/:id_historial')
     .get(getHistorialMedicoById)
     .put(updateHistorialMedico)
     .delete(deleteHistorialMedico);
+
+// ruta para perfil de paciente ajustes
+// router.route('/paciente/:curp_p/perfil')
+//     .get(getProfile)
+//     .get(updateProfileImage);
 
 module.exports = router;

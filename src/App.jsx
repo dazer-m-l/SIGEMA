@@ -10,6 +10,9 @@ import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword'
 
 const App = () => {
+  const handleThemeChange = (newTheme) => {
+    setIsDarkTheme(newTheme);
+  };
   return (
     <Router>
       <Routes>
@@ -21,6 +24,7 @@ const App = () => {
           <Route path="/staff" element={<Staff />} />
           <Route path="/history" element={<History />} />
           <Route path="/settings" element={<Settings />} />
+          
         </Route>
       </Routes>
     </Router>

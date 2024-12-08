@@ -51,11 +51,11 @@ const StaffForm = ({ staffType, selectedStaff, isEditing, onCreate, onUpdate, on
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">{isEditing ? 'Editar' : 'Crear'} {staffType === 'pacientes' ? 'Paciente' : 'Médico'}</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">{isEditing ? 'Editar' : 'Crear'} {staffType === 'pacientes' ? 'Paciente' : 'Médico'}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {staffType === 'pacientes' ? (
           <>
-            <h3 className="text-lg font-medium">Datos del Paciente</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Datos del Paciente</h3>
             <input
               type="text"
               name="nombre_p"
@@ -128,7 +128,7 @@ const StaffForm = ({ staffType, selectedStaff, isEditing, onCreate, onUpdate, on
           </>
         ) : (
           <>
-            <h3 className="text-lg font-medium">Datos del Médico</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Datos del Médico</h3>
             <input
               type="text"
               name="nombre_m"

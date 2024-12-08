@@ -38,7 +38,18 @@ const Paciente = sequelize.define('Paciente', {
     estado_p: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+    ////modificado
+    // agregar
+    email: {
+        type:DataTypes.STRING,
+        allowNull: false,
+        unique:true
+    },
+    imagen_perfil:{
+        type: DataTypes.STRING,
+        defaultValue:null
+    }////
 }, {
     tableName: 'Paciente',
     timestamps: false

@@ -62,8 +62,8 @@ const Staff = () => {
   };
 
   return (
-    <div className="p-4">
-      <p className="text-lg font-bold mb-4">{staffType === 'medicos' ? 'Gestión de Médicos' : 'Gestión de Pacientes'}</p>
+    <div className="p-4 bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
+      <p className="text-lg font-bold mb-4 dark:text-black">{staffType === 'medicos' ? 'Gestión de Médicos' : 'Gestión de Pacientes'}</p>
       <div className="flex justify-center items-center mb-4">
         <label className="mr-4">
           <input
@@ -95,7 +95,7 @@ const Staff = () => {
           placeholder={staffType === 'medicos' ? 'Buscar por Cédula' : 'Buscar por CURP'}
           value={searchTerm}
           onChange={handleSearch}
-          className="w-full max-w-md px-4 py-2 m-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full max-w-md px-4 py-2 m-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-400"
         />
         <button
           onClick={() => {
@@ -103,7 +103,7 @@ const Staff = () => {
             setIsEditing(false);
             setShowModal(true);
           }}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md m-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md m-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-400"
         >
           Crear Nuevo
         </button>
@@ -122,8 +122,8 @@ const Staff = () => {
       />
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-black dark:bg-opacity-60 z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md text-black dark:text-white transition-colors duration-300">
             <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Registro' : 'Crear Nuevo Registro'}</h2>
             <StaffForm
               staffType={staffType}

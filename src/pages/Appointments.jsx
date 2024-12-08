@@ -92,13 +92,13 @@ const Appointments = () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, []);
-
+//modificado
   return (
-    <div className="p-4">
+    <div className="p-4 bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
       <p className="text-lg font-bold mb-4">Gestión de Citas</p>
-      <hr className="border-t-2 border-blue-500 my-4" />
+      <hr className="border-t-2 border-blue-500 dark:border-blue-300 my-4" />
       <br />
-
+      
       <AppointmentTable
         appointments={appointmentsData}
         searchTerm={searchTerm}
@@ -114,15 +114,17 @@ const Appointments = () => {
       <AnimatePresence>
         {showModal && (
           <motion.div
+          ///modificado
             id="modal-background"
-            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50"
+            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 dark:bg-black dark:bg-opacity-60 z-50" ////
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.3 }}
             onClick={handleOutsideClick}
-          >
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+          > 
+          
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md text-black dark:text-white transition-colors duration-300" onClick={(e) => e.stopPropagation()}>
               <h2 className="text-xl font-bold mb-4">{isEditing ? 'Editar Cita' : 'Crear Nueva Cita'}</h2>
               <AppointmentForm
                 selectedAppointment={selectedAppointment}

@@ -131,7 +131,7 @@ const Appointments = () => {
 
   return (
     <div className="p-4">
-      <p className="text-lg font-bold mb-4">Historial de Citas</p>
+      <p className="text-lg font-bold mb-4 dark:text-white text-black">Historial de Citas</p>
       <div className='mb-4 flex items-center'>
         <input
           type='text' 
@@ -155,15 +155,15 @@ const Appointments = () => {
         </select>
         {dateRange === 'personalizado' && (
         <div className="mb-4">
-          <label className="block">Fecha de inicio</label>
+          <label className="block dark:text-white"> Fecha de inicio</label>
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border p-2 rounded"
+            className="border p-2 rounded dark:bg-gray-800 dark:text-white dark:border-gray-600"
             required
           />
-          <label className="block mt-2">Fecha de fin</label>
+          <label className="block mt-2 dark:text-white text-gray-800">Fecha de fin</label>
           <input
             type="date"
             value={endDate}
