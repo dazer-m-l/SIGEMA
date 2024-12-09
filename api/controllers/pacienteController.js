@@ -68,33 +68,4 @@ exports.deletePaciente = asyncHandler(async (req, res, next) => {
         success: true,
         message: 'Paciente eliminado correctamente'
     });
-    //modificado
-// agregar email y foto de perfil
-// agregar email
-exports.getProfile = asyncHandler(async (req, res) => {
-    const { curp_p } = req.params; // Se usa el `curp_p` para identificar al usuario
-    const paciente = await Paciente.findByPk(curp_p);
-
-    if (!paciente) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    res.json(paciente);
-});
-
-// perfil
-exports.updateProfileImage = asyncHandler(async (req, res) => {
-    const { curp_p } = req.params;
-    const { imagen_perfil } = req.body; // Supongamos que envías la URL de la imagen
-
-    const paciente = await Paciente.findByPk(curp_p);
-    if (!paciente) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    paciente.imagen_perfil = imagen_perfil;
-    await paciente.save();
-
-    res.json({ message: 'Imagen de perfil actualizada', paciente });
-});
 });

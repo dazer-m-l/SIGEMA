@@ -6,9 +6,7 @@ const {
     getPaciente,
     createPaciente,
     updatePaciente,
-    deletePaciente,
-    getProfile,
-    updateProfileImage
+    deletePaciente
 } = require('./controllers/pacienteController');
 
 const {
@@ -53,27 +51,27 @@ router.route('/pacientes/:curp_p')
     .put(updatePaciente)
     .delete(deletePaciente);
 
-// Rutas para Citas
+    // Rutas para Citas
 router.route('/citas')
-    .get(getCitas)
-    .post(createCita);
-
+        .get(getCitas)
+        .post(createCita);
+    
 router.route('/citas/:id_cita')
-    .get(getCita)
-    .put(updateCita)
-    .delete(deleteCita);
-
-// Rutas para Médicos
+        .get(getCita)
+        .put(updateCita)
+        .delete(deleteCita);
+    
+    // Rutas para Médicos
 router.route('/medicos')
-    .get(getMedicos)
-    .post(createMedico);
-
+        .get(getMedicos)
+        .post(createMedico);
+    
 router.route('/medicos/:cedula_m')
-    .get(getMedico)
-    .put(updateMedico)
-    .delete(deleteMedico);
-
-// Rutas para Horarios
+        .get(getMedico)
+        .put(updateMedico)
+        .delete(deleteMedico);
+    
+    // Rutas para Horarios
 router.route('/horarios')
     .get(getHorarios)
     .post(createHorario);
@@ -92,10 +90,5 @@ router.route('/historial-medico/:id_historial')
     .get(getHistorialMedicoById)
     .put(updateHistorialMedico)
     .delete(deleteHistorialMedico);
-
-// ruta para perfil de paciente ajustes
-// router.route('/paciente/:curp_p/perfil')
-//     .get(getProfile)
-//     .get(updateProfileImage);
 
 module.exports = router;
