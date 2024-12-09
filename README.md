@@ -9,7 +9,7 @@ SIGEMA (Sistema de Gestión Médica) es una aplicación web diseñada para facil
 - **Frontend:** React JSX, Tailwind CSS
 - **Backend:** Node.js
 - **Base de datos:** MySQL
-- **Librerías:** express, cors, mysql2, sequelize, nodemon, dotenv, body-parser, axios, react-router-dom, tailwindcss
+- **Librerías:** express, cors, mysql2, sequelize, nodemon, dotenv, body-parser, axios, react-router-dom, tailwindcss,tailwindcss/form, framer-motion, highcharts-accessibility,highcharts highcharts-react-official .
 
 ## Funcionalidades Clave
 

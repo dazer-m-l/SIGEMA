@@ -10,6 +10,7 @@ const Staff = () => {
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [horariosData, setHorariosData] = useState([]);
 
   const fetchStaffData = async () => {
     try {
@@ -21,8 +22,18 @@ const Staff = () => {
     }
   };
 
+  const fetchHorariosData = async () => {
+    try {
+      const response = await axios.get('/api/horarios');
+      setHorariosData(response.data.data || []);
+    } catch (error) {
+      console.error('Error fetching horarios data:', error);
+    }
+  };
+
   useEffect(() => {
     fetchStaffData();
+    fetchHorariosData();
   }, [staffType]);
 
   const handleCreateStaff = async (newStaff) => {
@@ -36,10 +47,26 @@ const Staff = () => {
     }
   };
 
+  const handleUpdateHorario = async (horarios) => {
+    try {
+      await Promise.all(horarios.map(async (horario) => {
+        if (horario.id_horario) {
+          await axios.put(`/api/horarios/${horario.id_horario}`, horario);
+        } else {
+          await axios.post('/api/horarios', horario);
+        }
+      }));
+    } catch (error) {
+      console.error('Error updating horarios:', error);
+    }
+  };
+
   const handleUpdateStaff = async (updatedStaff) => {
     try {
+
       const endpoint = staffType === 'medicos' ? `/api/medicos/${updatedStaff.cedula_m}` : `/api/pacientes/${updatedStaff.curp_p}`;
       await axios.put(endpoint, updatedStaff);
+      await handleUpdateHorario(updatedStaff.horarios);
       fetchStaffData();
       setShowModal(false);
     } catch (error) {
@@ -64,6 +91,7 @@ const Staff = () => {
   return (
     <div className="p-4 bg-white text-black dark:bg-gray-900 dark:text-white transition-colors duration-300">
       <p className="text-lg font-bold mb-4 dark:text-black">{staffType === 'medicos' ? 'Gestión de Médicos' : 'Gestión de Pacientes'}</p>
+      
       <div className="flex justify-center items-center mb-4">
         <label className="mr-4">
           <input
@@ -117,6 +145,12 @@ const Staff = () => {
           setSelectedStaff(staff);
           setIsEditing(true);
           setShowModal(true);
+
+          if (staffType === 'medicos') {
+            const horarios = Array.isArray(horariosData) ? 
+                             horariosData.filter(horario => horario.cedula_m === staff.cedula_m) : [];
+            setSelectedStaff(prev => ({ ...prev, horarios }));
+          }
         }}
         onDelete={handleDeleteStaff}
       />
@@ -133,7 +167,6 @@ const Staff = () => {
               onUpdate={handleUpdateStaff}
               onCancel={() => setShowModal(false)}
             />
-
           </div>
         </div>
       )}

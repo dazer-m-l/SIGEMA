@@ -5,23 +5,25 @@ const Horario = sequelize.define('Horario', {
     id_horario: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
     dia_semana: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'),
         allowNull: false
     },
     hora_inicio: {
         type: DataTypes.TIME,
-        allowNull: false
     },
     hora_fin: {
         type: DataTypes.TIME,
-        allowNull: false
     },
     cedula_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'Medicos',
+            key: 'cedula_m'
+        }
     }
 }, {
     tableName: 'Horario',

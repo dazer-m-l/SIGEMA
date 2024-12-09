@@ -1,43 +1,39 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const db = require('../config/db');
 
-const Medico = sequelize.define('Medico', {
+const Medico = db.define('Medico', {
     cedula_m: {
         type: DataTypes.STRING,
         primaryKey: true,
-        allowNull: false
     },
     nombre_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     aPaterno_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     aMaterno_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     especialidad_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     telefono_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     eMail_m: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
-    id_horario: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    }
 }, {
-    tableName: 'Medico',
-    timestamps: false
+    timestamps: false,
+    tableName: 'Medico'
 });
+
 
 module.exports = Medico;

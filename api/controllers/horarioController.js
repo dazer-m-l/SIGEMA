@@ -25,13 +25,31 @@ exports.getHorario = asyncHandler(async (req, res, next) => {
     });
 });
 
-exports.createHorario = asyncHandler(async (req, res, next) => {
-    const horario = await Horario.create(req.body);
+exports.createHorario = asyncHandler(async (req, res) => {
+    const { dia, hora_inicio, hora_fin } = req.body;
 
-    res.status(201).json({
-        success: true,
-        data: horario
-    });
+    if (!dia || !hora_inicio || !hora_fin) {
+        return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
+    }
+
+    try {
+        const nuevoHorario = await Horario.create({
+            dia,
+            hora_inicio,
+            hora_fin,
+        });
+
+        res.status(201).json({
+            id_horario: nuevoHorario.id_horario,
+            message: 'Horario creado exitosamente.',
+        });
+    } catch (error) {
+        console.error('Error al crear horario:', error);
+        res.status(500).json({
+            message: 'Error al crear horario.',
+            error: error.message,
+        });
+    }
 });
 
 exports.updateHorario = asyncHandler(async (req, res, next) => {
